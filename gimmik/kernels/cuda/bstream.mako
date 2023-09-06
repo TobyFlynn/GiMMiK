@@ -22,24 +22,24 @@ ${kname}(const ${dtype}* __restrict__ b, ${dtype}* __restrict__ c)
 
     if (i < n)
     {
-        ${dtype} bv, csub[${m}];
+        ${dtype} bv;
 
 ## Iterare through the used rows of B
 % for kx in bix:
         bv = __ldcg(b + i + ${kx}*ldb);
   % for j, jx in enumerate(A[:, kx]):
     % if jx != 0 and kx == afix[j]:
-        csub[${j}] = ${jx}*bv;
+        ${dtype} csub_${j} = ${jx}*bv;
     % elif jx != 0:
-        csub[${j}] += ${jx}*bv;
+        csub_${j} += ${jx}*bv;
     % endif
     ##
     % if kx == alix[j] and beta == 0:
-        __stcg(c + i + ${j}*ldc, csub[${j}]);
+        __stcg(c + i + ${j}*ldc, csub_${j});
     % elif kx == alix[j] and beta == 1:
-        c[i + ${j}*ldc] += csub[${j}];
+        c[i + ${j}*ldc] += csub_${j};
     % elif kx == alix[j]:
-        c[i + ${j}*ldc] = csub[${j}] + ${beta}*c[i + ${j}*ldc];
+        c[i + ${j}*ldc] = csub_${j} + ${beta}*c[i + ${j}*ldc];
     % endif
   % endfor
 % endfor
