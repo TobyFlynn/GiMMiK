@@ -4,6 +4,7 @@ from gimmik._version import __version__
 from gimmik.c import CMatMul
 from gimmik.copenmp import COpenMPMatMul
 from gimmik.cuda import CUDAMatMul
+from gimmik.cuda_dense import CUDADenseMatMul
 from gimmik.ispc import ISPCMatMul
 from gimmik.hip import HIPMatMul
 from gimmik.metal import MetalMatMul
