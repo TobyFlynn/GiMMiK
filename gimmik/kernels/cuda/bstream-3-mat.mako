@@ -46,10 +46,10 @@ ${kname}(const ${dtype}* __restrict__ b, ${dtype}* __restrict__ c)
 ## Iterare through the used rows of B
 % for kx in bix:
   % for j, jx in enumerate(A_1[:, kx]):
-    % if jx != 0 and kx == afix[j]:
-        ${dtype} csub_${j}_1 = ${jx}*csub_${j};
+    % if jx != 0 and kx == afix_1[j]:
+        ${dtype} csub_${j}_1 = ${jx}*csub_${kx};
     % elif jx != 0:
-        csub_${j}_1 += ${jx}*csub_${j};
+        csub_${j}_1 += ${jx}*csub_${kx};
     % endif
   % endfor
 % endfor
@@ -57,10 +57,10 @@ ${kname}(const ${dtype}* __restrict__ b, ${dtype}* __restrict__ c)
 ## Iterare through the used rows of B
 % for kx in bix:
   % for j, jx in enumerate(A_2[:, kx]):
-    % if jx != 0 and kx == afix[j]:
-        ${dtype} csub_${j}_2 = ${jx}*csub_${j}_2;
+    % if jx != 0 and kx == afix_2[j]:
+        ${dtype} csub_${j}_2 = ${jx}*csub_${kx}_1;
     % elif jx != 0:
-        csub_${j}_2 += ${jx}*csub_${j}_2;
+        csub_${j}_2 += ${jx}*csub_${kx}_1;
     % endif
     ##
     % if kx == alix[j] and beta == 0:

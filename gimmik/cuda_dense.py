@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from gimmik.base import MatMul
+import numpy as np
 
 
 class CUDADenseMatMul(MatMul):
@@ -10,7 +11,11 @@ class CUDADenseMatMul(MatMul):
 
     def _kernel_generators(self, dtype, dsize, *, compute_capability=None):
         # B streaming, C accumulation kernel
-        args = {'A_1': self.mat_1, 'A_2': self.mat_2}
+        self.afix_1 = (self.mat_1 != 0).argmax(axis=1)
+        self.afix_1 = np.where(np.any(self.mat_1 != 0, axis=1), self.afix_1, -1)
+        self.afix_2 = (self.mat_2 != 0).argmax(axis=1)
+        self.afix_2 = np.where(np.any(self.mat_2 != 0, axis=1), self.afix_2, -1)
+        args = {'A_1': self.mat_1, 'A_2': self.mat_2, 'afix_1': self.afix_1, 'afix_2': self.afix_2}
         yield ('bstream-3-mat', args, {})
 
     def _process_meta(self, meta):
